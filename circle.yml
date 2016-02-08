@@ -9,7 +9,7 @@ dependencies:
 test:
   override:
     - docker run -d -p 8080:80 roylines/ecs-api-gateway:$CIRCLE_BUILD_NUM; sleep 10
-    - curl --retry 10 --retry-delay 5 -v http://localhost:9200
+    - curl --retry 10 --retry-delay 5 -v http://localhost:8080
 
 deployment:
   hub:
