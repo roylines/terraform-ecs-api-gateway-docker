@@ -13,7 +13,7 @@ test:
 
 deployment:
   hub:
-    branch: xmaster
+    branch: master
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - docker push roylines/ecs-api-gateway:$CIRCLE_BUILD_NUM
