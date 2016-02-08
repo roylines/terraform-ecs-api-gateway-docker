@@ -4,12 +4,13 @@ machine:
 dependencies:
   override:
     - docker info
-    - docker build -t roylines/ecs-api-gateway:latest .
-    - docker tag roylines/ecs-api-gateway:latest roylines/ecs-api-gateway:$CIRCLE_BUILD_NUM
+    - docker build -t $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:latest .
+    - docker tag $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:latest $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$CIRCLE_BUILD_NUM
 
 test:
   override:
-    - docker run -d -p 8080:80 roylines/ecs-api-gateway; sleep 10
+    - docker run -d -p 8080:80 $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:latest
+    - sleep 10
     - curl --retry 10 --retry-delay 5 -v http://localhost:8080
 
 deployment:
@@ -17,4 +18,4 @@ deployment:
     branch: master
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker push roylines/ecs-api-gateway
+      - docker push $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
