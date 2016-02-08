@@ -1,0 +1,19 @@
+machine:
+  services:
+    - docker
+dependencies:
+  override:
+    - docker info
+    - docker build -t roylines/ecs-api-gateway:$CIRCLE_BUILD_NUM .
+
+test:
+  override:
+    - docker run -d -p 8080:80 roylines/ecs-api-gateway:$CIRCLE_BUILD_NUM; sleep 10
+    - curl --retry 10 --retry-delay 5 -v http://localhost:9200
+
+deployment:
+  hub:
+    branch: xmaster
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker push roylines/ecs-api-gateway:$CIRCLE_BUILD_NUM
